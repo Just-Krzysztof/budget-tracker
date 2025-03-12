@@ -8,9 +8,6 @@ export class RegisterDto {
   firstName: string;
 
   @IsNotEmpty()
-  lastName: string;
-
-  @IsNotEmpty()
   @MinLength(8)
   password: string;
 }

@@ -29,10 +29,10 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto) {
-    // Deleguj tworzenie użytkownika do UsersService
+    // redirect to users services to create user
     const user = await this.usersService.create(registerDto);
 
-    // Wygeneruj token JWT dla nowo utworzonego użytkownika
+    // generate JWT token for new user
     const payload = { sub: user.id, email: user.email };
 
     return {
@@ -40,7 +40,6 @@ export class AuthService {
         id: user.id,
         email: user.email,
         firstName: user.firstName,
-        lastName: user.lastName,
       },
       access_token: await this.jwtService.signAsync(payload),
     };

@@ -26,7 +26,6 @@ export class UsersService {
   async create(userData: {
     email: string;
     firstName: string;
-    lastName: string;
     password: string;
   }): Promise<User> {
     // check if user with this email already exists
