@@ -1,7 +1,7 @@
 import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { AdditionType } from '../entities/additions.entity';
+import { FinancialRecordType } from '../entities/financialRecords.entity';
 
-export class CreateAdditionDto {
+export class UpdateFinancialRecordDto {
   @IsNumber()
   @IsNotEmpty()
   value: number;
@@ -17,6 +17,6 @@ export class CreateAdditionDto {
   @IsString()
   description: string;
 
-  @IsEnum(AdditionType)
-  type: AdditionType;
+  @IsEnum(FinancialRecordType)
+  type: FinancialRecordType;
 }

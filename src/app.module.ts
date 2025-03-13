@@ -6,7 +6,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { TagsModule } from './tags/tags.module';
-import { AdditionsModule } from './additions/additions.module';
+import { FinancialRecordsModule } from './financialRecords/financialRecords.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -29,7 +29,7 @@ import { AdditionsModule } from './additions/additions.module';
     AuthModule,
     UsersModule,
     TagsModule,
-    AdditionsModule,
+    FinancialRecordsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -9,13 +9,13 @@ import {
 import { User } from '../../users/entities/user.entity';
 
 // First define the enum with allowed values
-export enum AdditionType {
+export enum FinancialRecordType {
   INCOME = 'income',
   EXPENSE = 'expense',
 }
 
-@Entity('additions')
-export class Addition {
+@Entity('financialRecords')
+export class FinancialRecord {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -33,10 +33,10 @@ export class Addition {
 
   @Column({
     type: 'enum',
-    enum: AdditionType,
-    default: AdditionType.EXPENSE,
+    enum: FinancialRecordType,
+    default: FinancialRecordType.EXPENSE,
   })
-  type: AdditionType;
+  type: FinancialRecordType;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
