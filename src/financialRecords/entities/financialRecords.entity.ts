@@ -7,12 +7,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-
-// First define the enum with allowed values
-export enum FinancialRecordType {
-  INCOME = 'income',
-  EXPENSE = 'expense',
-}
+import { RecordType } from '../enums/record-type.enum';
 
 @Entity('financialRecords')
 export class FinancialRecord {
@@ -33,10 +28,10 @@ export class FinancialRecord {
 
   @Column({
     type: 'enum',
-    enum: FinancialRecordType,
-    default: FinancialRecordType.EXPENSE,
+    enum: RecordType,
+    default: RecordType.EXPENSE,
   })
-  type: FinancialRecordType;
+  type: RecordType;
 
   @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })

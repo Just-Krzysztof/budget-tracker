@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { FinancialRecordType } from '../entities/financialRecords.entity';
+import { RecordType } from '../enums/record-type.enum';
 
 export class CreateFinancialRecordDto {
   @IsNumber()
@@ -17,6 +17,6 @@ export class CreateFinancialRecordDto {
   @IsString()
   description: string;
 
-  @IsEnum(FinancialRecordType)
-  type: FinancialRecordType;
+  @IsEnum(RecordType)
+  type: RecordType;
 }

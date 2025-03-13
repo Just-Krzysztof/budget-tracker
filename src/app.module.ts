@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { TagsModule } from './tags/tags.module';
 import { FinancialRecordsModule } from './financialRecords/financialRecords.module';
+import { SummaryModule } from './summary/summary.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -30,6 +31,7 @@ import { FinancialRecordsModule } from './financialRecords/financialRecords.modu
     UsersModule,
     TagsModule,
     FinancialRecordsModule,
+    SummaryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
