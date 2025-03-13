@@ -38,10 +38,10 @@ export class TagsService {
       throw new NotFoundException('User not found');
     }
 
-    // Pobierz wszystkie tagi użytkownika używając relacji
+    // Get all user tags using relations
     return this.tagsRepository.find({
       where: { user: { id: userId } },
-      order: { createdAt: 'DESC' }, // sortuj od najnowszych
+      order: { createdAt: 'DESC' }, // sort from newest
     });
   }
 

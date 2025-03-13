@@ -31,7 +31,7 @@ export class UsersService {
     // check if user with this email already exists
     const existingUser = await this.findByEmail(userData.email);
     if (existingUser) {
-      throw new ConflictException('Email już istnieje w systemie');
+      throw new ConflictException('Email already exists in the system');
     }
 
     // hash password
@@ -52,7 +52,7 @@ export class UsersService {
   ): Promise<User> {
     const user = await this.findById(userId);
     if (!user) {
-      throw new NotFoundException('Użytkownik nie znaleziony');
+      throw new NotFoundException('User not found');
     }
 
     Object.assign(user, userData);
@@ -66,7 +66,7 @@ export class UsersService {
   ): Promise<void> {
     const user = await this.findById(userId);
     if (!user) {
-      throw new NotFoundException('Użytkownik nie znaleziony');
+      throw new NotFoundException('User not found');
     }
 
     // Verify current password
@@ -75,7 +75,7 @@ export class UsersService {
       user.password,
     );
     if (!isPasswordValid) {
-      throw new ConflictException('Nieprawidłowe obecne hasło');
+      throw new ConflictException('Current password is incorrect');
     }
 
     // hash and save new password

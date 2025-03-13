@@ -5,7 +5,7 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Dodaj globalną walidację
+  // Add global validation
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, // removes fields that are not defined in the DTO

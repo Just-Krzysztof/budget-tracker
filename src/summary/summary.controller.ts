@@ -35,5 +35,5 @@ export class SummaryController {
     return this.summaryService.getYearlySummary(userId, year);
   }
 
-  // Możesz dodać więcej endpointów, np. dla szczegółowych podsumowań
+  // You can add more endpoints, e.g. for detailed summaries
 }
