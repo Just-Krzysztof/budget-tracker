@@ -8,7 +8,7 @@ import {
 import { User } from '../../users/entities/user.entity';
 
 @Entity('tags')
-export class Tag {
+export class Tags {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

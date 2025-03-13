@@ -15,19 +15,19 @@ export class AdditionsService {
   ) {}
 
   async createAddition(createAdditionDto: CreateAdditionDto, userId: string) {
-    // Sprawdź, czy użytkownik istnieje
+    // Check user exists
     const user = await this.usersRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new NotFoundException('Użytkownik nie znaleziony');
     }
 
-    // Utwórz nowy dodatek
+    // Create new Addition
     const newAddition = this.additionsRepository.create({
       ...createAdditionDto,
-      user, // Przypisz obiekt użytkownika
+      user, // connect user object
     });
 
-    // Zapisz do bazy danych
+    // save to database
     return this.additionsRepository.save(newAddition);
   }
 
