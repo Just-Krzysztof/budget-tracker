@@ -25,6 +25,10 @@ import { SummaryModule } from './summary/summary.module';
         database: configService.get('DATABASE_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: process.env.NODE_ENV !== 'production',
+        ssl:
+          process.env.NODE_ENV === 'production'
+            ? true // Standard SSL in production
+            : { rejectUnauthorized: false }, // Simplified in development
       }),
     }),
     AuthModule,
