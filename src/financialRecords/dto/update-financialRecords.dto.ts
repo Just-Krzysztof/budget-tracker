@@ -1,4 +1,10 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsDate,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+} from 'class-validator';
 import { RecordType } from '../enums/record-type.enum';
 
 export class UpdateFinancialRecordDto {
@@ -16,6 +22,10 @@ export class UpdateFinancialRecordDto {
 
   @IsString()
   description: string;
+
+  @IsDate()
+  @IsNotEmpty()
+  date: Date;
 
   @IsEnum(RecordType)
   type: RecordType;
