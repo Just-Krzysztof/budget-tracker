@@ -15,7 +15,10 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: ['http://localhost:5173'],
+    origin: [
+      'http://localhost:5173',
+      'https://fe-budget-tracker.onrender.com/',
+    ],
     credentials: true, // Important if you use cookies, authorization headers, etc.
   });
 
