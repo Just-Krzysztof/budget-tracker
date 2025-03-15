@@ -5,6 +5,7 @@ import {
   IsNumber,
   IsString,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 import { RecordType } from '../enums/record-type.enum';
 
 export class CreateFinancialRecordDto {
@@ -23,6 +24,7 @@ export class CreateFinancialRecordDto {
   @IsString()
   description: string;
 
+  @Type(() => Date)
   @IsDate()
   @IsNotEmpty()
   date: Date;
