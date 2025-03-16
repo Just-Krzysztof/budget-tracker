@@ -20,6 +20,8 @@ async function bootstrap() {
       'http://localhost:5173',
       'https://fe-budget-tracker-production.up.railway.app',
       'https://fe-budget-tracker-production.up.railway.app/',
+      'https://track-expenses.up.railway.app',
+      'https://track-expenses.up.railway.app/',
     ],
     credentials: true,
   });
