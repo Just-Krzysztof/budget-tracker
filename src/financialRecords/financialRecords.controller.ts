@@ -44,7 +44,7 @@ export class FinancialRecordsController {
   }
 
   @UseGuards(AuthGuard)
-  @Get('filter')
+  @Post('filter')
   findByMonthAndYear(
     @Request() req,
     @Query('year', new ParseIntPipe()) year: number,
