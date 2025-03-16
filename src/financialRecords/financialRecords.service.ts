@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { CreateFinancialRecordDto } from './dto/create-financialRecords.dto';
 import { FinancialRecord } from './entities/financialRecords.entity';
 import { User } from '../users/entities/user.entity';
@@ -72,5 +72,20 @@ export class FinancialRecordsService {
 
     const updatedFinancialRecord = await this.findOne(id, userId);
     return updatedFinancialRecord;
+  }
+
+  async findByMonthAndYear(userId: string, year: number, month: number) {
+    const startDate = new Date(year, month - 1, 1);
+    const endDate = new Date(year, month, 0);
+
+    endDate.setHours(23, 59, 59, 999);
+
+    return this.financialRecordsRepository.find({
+      where: {
+        user: { id: userId },
+        date: Between(startDate, endDate),
+      },
+      order: { date: 'DESC' },
+    });
   }
 }

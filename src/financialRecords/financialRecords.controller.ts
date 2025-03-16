@@ -11,6 +11,8 @@ import {
   HttpStatus,
   Request,
   Put,
+  Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { FinancialRecordsService } from './financialRecords.service';
 import { CreateFinancialRecordDto } from './dto/create-financialRecords.dto';
@@ -39,6 +41,17 @@ export class FinancialRecordsController {
   findAll(@Request() req) {
     const userId = req.user.sub;
     return this.financialRecordsService.findAllByUser(userId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('filter')
+  findByMonthAndYear(
+    @Request() req,
+    @Query('year', new ParseIntPipe()) year: number,
+    @Query('month', new ParseIntPipe()) month: number,
+  ) {
+    const userId = req.user.sub;
+    return this.financialRecordsService.findByMonthAndYear(userId, year, month);
   }
 
   @UseGuards(AuthGuard)

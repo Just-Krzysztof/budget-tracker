@@ -20,7 +20,7 @@ async function bootstrap() {
       'https://fe-budget-tracker.onrender.com',
       'https://fe-budget-tracker.onrender.com/',
     ],
-    credentials: true, // Important if you use cookies, authorization headers, etc.
+    credentials: true,
   });
 
   await app.listen(process.env.PORT || 3025);
