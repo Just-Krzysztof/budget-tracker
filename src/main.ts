@@ -18,6 +18,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:5173',
+      'http://localhost:5173/',
       'https://fe-budget-tracker-production.up.railway.app',
       'https://fe-budget-tracker-production.up.railway.app/',
       'https://track-expenses.up.railway.app',
