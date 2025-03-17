@@ -45,13 +45,20 @@ export class FinancialRecordsController {
 
   @UseGuards(AuthGuard)
   @Post('filter')
+  @HttpCode(HttpStatus.OK)
   findByMonthAndYear(
     @Request() req,
     @Query('year', new ParseIntPipe()) year: number,
     @Query('month', new ParseIntPipe()) month: number,
+    @Query('type') type: string,
   ) {
     const userId = req.user.sub;
-    return this.financialRecordsService.findByMonthAndYear(userId, year, month);
+    return this.financialRecordsService.findByMonthAndYear(
+      userId,
+      year,
+      month,
+      type,
+    );
   }
 
   @UseGuards(AuthGuard)

@@ -5,6 +5,7 @@ import { CreateFinancialRecordDto } from './dto/create-financialRecords.dto';
 import { FinancialRecord } from './entities/financialRecords.entity';
 import { User } from '../users/entities/user.entity';
 import { UpdateFinancialRecordDto } from './dto/update-financialRecords.dto';
+import { RecordType } from './enums/record-type.enum';
 
 @Injectable()
 export class FinancialRecordsService {
@@ -74,7 +75,12 @@ export class FinancialRecordsService {
     return updatedFinancialRecord;
   }
 
-  async findByMonthAndYear(userId: string, year: number, month: number) {
+  async findByMonthAndYear(
+    userId: string,
+    year: number,
+    month: number,
+    type: string,
+  ) {
     const startDate = new Date(year, month - 1, 1);
     const endDate = new Date(year, month, 0);
 
@@ -84,6 +90,7 @@ export class FinancialRecordsService {
       where: {
         user: { id: userId },
         date: Between(startDate, endDate),
+        type: type as RecordType,
       },
       order: { date: 'DESC' },
     });
