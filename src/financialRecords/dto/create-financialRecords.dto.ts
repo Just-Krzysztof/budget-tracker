@@ -5,12 +5,17 @@ import {
   IsString,
   IsDecimal,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import { RecordType } from '../enums/record-type.enum';
 
 export class CreateFinancialRecordDto {
+  @Transform(
+    ({ value }) => (typeof value === 'number' ? value.toString() : value),
+    { toClassOnly: true },
+  )
   @IsDecimal({ decimal_digits: '0,2' })
   @IsNotEmpty()
+  @Transform(({ value }) => parseFloat(value), { toPlainOnly: true })
   value: number;
 
   @IsString()
