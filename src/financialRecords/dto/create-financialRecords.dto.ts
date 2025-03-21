@@ -10,7 +10,7 @@ import { RecordType } from '../enums/record-type.enum';
 
 export class CreateFinancialRecordDto {
   @Transform(
-    ({ value }) => (typeof value === 'number' ? value.toString() : value),
+    ({ value }): string => (typeof value === 'number' ? String(value) : value),
     { toClassOnly: true },
   )
   @IsDecimal({ decimal_digits: '0,2' })
