@@ -2,14 +2,14 @@ import {
   IsDate,
   IsEnum,
   IsNotEmpty,
-  IsNumber,
   IsString,
+  IsDecimal,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { RecordType } from '../enums/record-type.enum';
 
 export class CreateFinancialRecordDto {
-  @IsNumber()
+  @IsDecimal({ decimal_digits: '0,2' })
   @IsNotEmpty()
   value: number;
 
