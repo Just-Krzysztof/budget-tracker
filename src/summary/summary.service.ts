@@ -3,7 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Between } from 'typeorm';
 import { FinancialRecord } from '../financialRecords/entities/financialRecords.entity';
 import { RecordType } from '../financialRecords/enums/record-type.enum';
-import { SummaryResponseDto } from './dto/summary-response.dto';
+import {
+  SummaryResponseDto,
+  CurrencySummary,
+} from './dto/summary-response.dto';
 
 @Injectable()
 export class SummaryService {
@@ -18,33 +21,21 @@ export class SummaryService {
     month: number,
   ): Promise<SummaryResponseDto> {
     const startDate = new Date(year, month - 1, 1); // Months in JS are 0-indexed
-    console.log('startDate', startDate);
 
     const endDate = new Date(year, month, 0); // Last day of the month
     endDate.setHours(23, 59, 59, 999);
-    console.log('endDate', endDate);
 
     // Get all financial records of the user for the given month
     const records = await this.financialRecordRepository.find({
       where: {
         user: { id: userId },
-        createdAt: Between(startDate, endDate),
+        date: Between(startDate, endDate),
       },
       relations: ['user'],
     });
-    console.log('records', records);
 
-    // Calculate the sum of income and expenses
-    const totalIncome = records
-      .filter((record) => record.type === RecordType.INCOME)
-      .reduce((sum, record) => sum + Number(record.value), 0);
-
-    const totalExpenses = records
-      .filter((record) => record.type === RecordType.EXPENSE)
-      .reduce((sum, record) => sum + Number(record.value), 0);
-
-    // Calculate savings (income - expenses)
-    const totalSaved = totalIncome - totalExpenses;
+    const { totalIncome, totalExpenses, totalSaved, currencies } =
+      this.calculateCurrencySummaries(records);
 
     // Format the month name
     const monthName = new Date(year, month - 1).toLocaleString('pl-PL', {
@@ -56,6 +47,7 @@ export class SummaryService {
       totalExpenses,
       totalSaved,
       period: `${monthName} ${year}`,
+      currencies,
     };
   }
 
@@ -71,12 +63,59 @@ export class SummaryService {
     const records = await this.financialRecordRepository.find({
       where: {
         user: { id: userId },
-        createdAt: Between(startDate, endDate),
+        date: Between(startDate, endDate),
       },
       relations: ['user'],
     });
 
-    // Calculate the sum of income and expenses
+    const { totalIncome, totalExpenses, totalSaved, currencies } =
+      this.calculateCurrencySummaries(records);
+
+    return {
+      totalIncome,
+      totalExpenses,
+      totalSaved,
+      period: `Year ${year}`,
+      currencies,
+    };
+  }
+
+  private calculateCurrencySummaries(records: FinancialRecord[]): {
+    totalIncome: number;
+    totalExpenses: number;
+    totalSaved: number;
+    currencies: CurrencySummary[];
+  } {
+    // Podsumowanie z podziałem na waluty
+    const currencyMap = new Map<string, CurrencySummary>();
+
+    // Dzielimy rekordy według waluty
+    records.forEach((record) => {
+      const { currency, type, value } = record;
+      if (!currencyMap.has(currency)) {
+        currencyMap.set(currency, {
+          currency,
+          income: 0,
+          expenses: 0,
+          saved: 0,
+        });
+      }
+
+      const summary = currencyMap.get(currency);
+
+      // Dodajemy sprawdzenie, czy summary istnieje
+      if (summary) {
+        if (type === RecordType.INCOME) {
+          summary.income += Number(value);
+        } else if (type === RecordType.EXPENSE) {
+          summary.expenses += Number(value);
+        }
+
+        summary.saved = summary.income - summary.expenses;
+      }
+    });
+
+    // Obliczamy całkowite sumy (można to później usunąć, jeśli będziemy prezentować tylko sumy per waluta)
     const totalIncome = records
       .filter((record) => record.type === RecordType.INCOME)
       .reduce((sum, record) => sum + Number(record.value), 0);
@@ -85,14 +124,13 @@ export class SummaryService {
       .filter((record) => record.type === RecordType.EXPENSE)
       .reduce((sum, record) => sum + Number(record.value), 0);
 
-    // Calculate savings (income - expenses)
     const totalSaved = totalIncome - totalExpenses;
 
     return {
       totalIncome,
       totalExpenses,
       totalSaved,
-      period: `Year ${year}`,
+      currencies: Array.from(currencyMap.values()),
     };
   }
 
