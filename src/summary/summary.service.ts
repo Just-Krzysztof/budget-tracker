@@ -106,25 +106,33 @@ export class SummaryService {
       // Dodajemy sprawdzenie, czy summary istnieje
       if (summary) {
         if (type === RecordType.INCOME) {
-          summary.income += Number(value);
+          summary.income = Number((summary.income + Number(value)).toFixed(2));
         } else if (type === RecordType.EXPENSE) {
-          summary.expenses += Number(value);
+          summary.expenses = Number(
+            (summary.expenses + Number(value)).toFixed(2),
+          );
         }
 
-        summary.saved = summary.income - summary.expenses;
+        summary.saved = Number((summary.income - summary.expenses).toFixed(2));
       }
     });
 
     // Obliczamy całkowite sumy (można to później usunąć, jeśli będziemy prezentować tylko sumy per waluta)
-    const totalIncome = records
-      .filter((record) => record.type === RecordType.INCOME)
-      .reduce((sum, record) => sum + Number(record.value), 0);
+    const totalIncome = Number(
+      records
+        .filter((record) => record.type === RecordType.INCOME)
+        .reduce((sum, record) => sum + Number(record.value), 0)
+        .toFixed(2),
+    );
 
-    const totalExpenses = records
-      .filter((record) => record.type === RecordType.EXPENSE)
-      .reduce((sum, record) => sum + Number(record.value), 0);
+    const totalExpenses = Number(
+      records
+        .filter((record) => record.type === RecordType.EXPENSE)
+        .reduce((sum, record) => sum + Number(record.value), 0)
+        .toFixed(2),
+    );
 
-    const totalSaved = totalIncome - totalExpenses;
+    const totalSaved = Number((totalIncome - totalExpenses).toFixed(2));
 
     return {
       totalIncome,
