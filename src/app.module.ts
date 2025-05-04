@@ -29,6 +29,12 @@ import { SummaryModule } from './summary/summary.module';
         ssl: {
           rejectUnauthorized: false,
         },
+        extra: {
+          family: 4,
+          max: 20,
+          idleTimeoutMillis: 30000,
+          connectionTimeoutMillis: 2000,
+        },
       }),
     }),
     AuthModule,
