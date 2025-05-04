@@ -18,16 +18,25 @@ import { SummaryModule } from './summary/summary.module';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        const connectionString = `postgresql://${configService.get('SUPABASE_DB_USER')}:${configService.get('SUPABASE_DB_PASSWORD')}@${configService.get('SUPABASE_DB_HOST')}:${configService.get('SUPABASE_DB_PORT')}/${configService.get('SUPABASE_DB_NAME')}`;
+        const isProduction = process.env.NODE_ENV === 'production';
+
+        console.log('Environment:', process.env.NODE_ENV);
+        console.log('Database host:', configService.get('SUPABASE_DB_HOST'));
 
         return {
           type: 'postgres',
-          url: connectionString,
+          host: configService.get('SUPABASE_DB_HOST'),
+          port: configService.get('SUPABASE_DB_PORT'),
+          username: configService.get('SUPABASE_DB_USER'),
+          password: configService.get('SUPABASE_DB_PASSWORD'),
+          database: configService.get('SUPABASE_DB_NAME'),
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
-          synchronize: process.env.NODE_ENV !== 'production',
-          ssl: {
-            rejectUnauthorized: false,
-          },
+          synchronize: !isProduction,
+          ssl: isProduction
+            ? {
+                rejectUnauthorized: false,
+              }
+            : false,
           extra: {
             family: 4,
             max: 20,
