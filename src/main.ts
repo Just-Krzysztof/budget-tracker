@@ -20,8 +20,11 @@ async function bootstrap() {
       'http://localhost:5173',
       'https://fe-budget-tracker-production.up.railway.app',
       'https://track-expenses.up.railway.app',
+      'https://budget-tracker-production-c2f4.up.railway.app',
     ],
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   });
 
   await app.listen(process.env.PORT || 3025);
