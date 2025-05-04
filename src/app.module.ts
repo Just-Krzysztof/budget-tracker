@@ -17,25 +17,25 @@ import { SummaryModule } from './summary/summary.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('SUPABASE_DB_HOST'),
-        port: configService.get('SUPABASE_DB_PORT'),
-        username: configService.get('SUPABASE_DB_USER'),
-        password: configService.get('SUPABASE_DB_PASSWORD'),
-        database: configService.get('SUPABASE_DB_NAME'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: process.env.NODE_ENV !== 'production',
-        ssl: {
-          rejectUnauthorized: false,
-        },
-        extra: {
-          family: 4,
-          max: 20,
-          idleTimeoutMillis: 30000,
-          connectionTimeoutMillis: 2000,
-        },
-      }),
+      useFactory: (configService: ConfigService) => {
+        const connectionString = `postgresql://${configService.get('SUPABASE_DB_USER')}:${configService.get('SUPABASE_DB_PASSWORD')}@${configService.get('SUPABASE_DB_HOST')}:${configService.get('SUPABASE_DB_PORT')}/${configService.get('SUPABASE_DB_NAME')}`;
+
+        return {
+          type: 'postgres',
+          url: connectionString,
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          synchronize: process.env.NODE_ENV !== 'production',
+          ssl: {
+            rejectUnauthorized: false,
+          },
+          extra: {
+            family: 4,
+            max: 20,
+            idleTimeoutMillis: 30000,
+            connectionTimeoutMillis: 2000,
+          },
+        };
+      },
     }),
     AuthModule,
     UsersModule,
