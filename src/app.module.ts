@@ -17,20 +17,34 @@ import { SummaryModule } from './summary/summary.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('SUPABASE_DB_HOST'),
-        port: configService.get('SUPABASE_DB_PORT'),
-        username: configService.get('SUPABASE_DB_USER'),
-        password: configService.get('SUPABASE_DB_PASSWORD'),
-        database: configService.get('SUPABASE_DB_NAME'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: process.env.NODE_ENV !== 'production',
-        ssl:
-          process.env.NODE_ENV === 'production'
-            ? true // Standard SSL in production
-            : { rejectUnauthorized: false }, // Simplified in development
-      }),
+      useFactory: (configService: ConfigService) => {
+        const dbUrl = configService.get<string>('SUPABASE_DB_URL');
+        return dbUrl
+          ? {
+              type: 'postgres',
+              url: dbUrl,
+              entities: [__dirname + '/**/*.entity{.ts,.js}'],
+              synchronize: process.env.NODE_ENV !== 'production',
+              ssl:
+                process.env.NODE_ENV === 'production'
+                  ? true
+                  : { rejectUnauthorized: false },
+            }
+          : {
+              type: 'postgres',
+              host: configService.get('SUPABASE_DB_HOST'),
+              port: configService.get('SUPABASE_DB_PORT'),
+              username: configService.get('SUPABASE_DB_USER'),
+              password: configService.get('SUPABASE_DB_PASSWORD'),
+              database: configService.get('SUPABASE_DB_NAME'),
+              entities: [__dirname + '/**/*.entity{.ts,.js}'],
+              synchronize: process.env.NODE_ENV !== 'production',
+              ssl:
+                process.env.NODE_ENV === 'production'
+                  ? true
+                  : { rejectUnauthorized: false },
+            };
+      },
     }),
     AuthModule,
     UsersModule,
